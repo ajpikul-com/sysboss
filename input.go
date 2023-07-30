@@ -17,13 +17,16 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 		buffer.WriteString(s) // we've received new input
 		commandDecoder := json.NewDecoder(buffer)
 		for {
-			var command interface{}
-			if err := commandDecoder.Decode(&command); err == nil || err == io.EOF {
+			command := new(Service) // not very flexible, want to specify command
+			if err := commandDecoder.Decode(command); err == nil || err == io.EOF {
+				// Does EOF get passed when there's data
 				go processCommand(command)
 				if err == io.EOF {
+					defaultLogger.Debug("Command EOF")
 					break
 				}
 			} else if err != nil {
+				defaultLogger.Debug("Command error, copying buffer")
 				io.Copy(buffer, commandDecoder.Buffered()) // TODO: okay to ignore error here?
 				break
 			}
@@ -33,10 +36,9 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 }
 
 // TODO: better to use a multireader instead of copy, will also help us if there is anything left over in the buffer after decode, instead of assumign decode takes all
-func processCommand(command interface{}) {
-	if commandService, ok := command.(Service); ok {
-		globalState.UpdateService(commandService)
-	} else {
-		panic("Command was weird type")
+func processCommand(command *Service) {
+	if command.Name == "" {
+		return
 	}
+	globalState.UpdateService(*command)
 }

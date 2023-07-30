@@ -5,6 +5,7 @@ go 1.20
 require (
 	github.com/ajpikul-com/ilog v0.0.0-20230725172214-d939933fe302
 	github.com/ajpikul-com/wsssh/wsconn v0.0.0-20230726140649-6094d48218d2
+	github.com/fsamin/go-dump v1.8.0
 	github.com/gorilla/mux v1.8.0
 	github.com/gorilla/websocket v1.5.0
 	golang.org/x/crypto v0.11.0
