@@ -9,12 +9,10 @@ var defaultLogger ilog.LoggerInterface
 
 func initLogger() {
 	defaultLogger = &ilog.SimpleLogger{}
+	defaultLogger.Level(ilog.INFO)
 	err := defaultLogger.Init()
 	if err != nil {
 		panic(err)
 	}
-	packageLogger := &ilog.SimpleLogger{}
-	packageLogger.Level(ilog.INFO)
-	packageLogger.Init()
-	wsconn.SetDefaultLogger(packageLogger)
+	wsconn.SetDefaultLogger(defaultLogger)
 }
