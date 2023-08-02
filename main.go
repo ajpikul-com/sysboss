@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"strconv"
+	//	"strconv"
 	"time"
 
 	"github.com/ajpikul-com/gitstatus"
@@ -44,7 +44,7 @@ func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
 	globalState.ReadLock() // TODO if global state has a jsonmarshall method it wouldn't need this
 	jsonWrite.Encode(globalState)
 	jsonWrite.Encode(map[string]*gitstatus.StateMap{"git": globalRepoState})
-	defaultLogger.Debug("Size of globalRepoState: " + strconv.Itoa(globalRepoState.Len()))
+	//defaultLogger.Debug("Size of globalRepoState: " + strconv.Itoa(globalRepoState.Len()))
 	globalState.ReadUnlock()
 	w.(http.Flusher).Flush()
 }

@@ -56,13 +56,15 @@ func processCommand(command map[string]json.RawMessage, name string) {
 			}
 		} else if k == "git" {
 			repostate := new(map[string]gitstatus.RepoState)
+
 			err := json.Unmarshal(v, repostate)
 			if err != nil {
 				defaultLogger.Error(err.Error())
 			} else {
+				globalRepoState.ClearClient(name)
 				for k2, v2 := range *repostate {
 					defaultLogger.Debug("Dumping a repostate")
-					globalRepoState.Update(k2, name, v2)
+					globalRepoState.Update(name, k2, v2) // ohh all this needs to be cleared
 				}
 			}
 		}

@@ -3,7 +3,7 @@ module github.com/ajpikul-com/sysboss
 go 1.20
 
 require (
-	github.com/ajpikul-com/gitstatus v0.0.0-20230802040710-5189da9be636
+	github.com/ajpikul-com/gitstatus v0.0.0-20230802173100-951a97863e23
 	github.com/ajpikul-com/ilog v0.0.0-20230802005115-88d039e2c7e6
 	github.com/ajpikul-com/wsssh/wsconn v0.0.0-20230731054624-00ee570e4f8a
 	github.com/gorilla/mux v1.8.0
@@ -28,9 +28,8 @@ require (
 	github.com/sergi/go-diff v1.3.1 // indirect
 	github.com/skeema/knownhosts v1.2.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
-	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.24.0 // indirect
+	go.uber.org/zap v1.25.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/net v0.13.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
