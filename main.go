@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/gorilla/mux"
@@ -38,9 +39,12 @@ func main() {
 func writeSystemStatus(w http.ResponseWriter, r *http.Request) {
 	// If r.Method = GET/POST
 	jsonWrite := json.NewEncoder(w)
+	jsonWrite.SetIndent("", "")
 	jsonWrite.SetEscapeHTML(true)
 	globalState.ReadLock() // TODO if global state has a jsonmarshall method it wouldn't need this
 	jsonWrite.Encode(globalState)
+	jsonWrite.Encode(globalRepoState)
+	defaultLogger.Debug("Size of globalRepoState: " + strconv.Itoa(globalRepoState.Len()))
 	globalState.ReadUnlock()
 	w.(http.Flusher).Flush()
 }
