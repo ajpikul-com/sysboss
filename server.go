@@ -49,7 +49,7 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 		IPAddress: r.Header.Get("x-forwarded-for"), // This is coming out as the proxy TODO maybe check to see if local
 		Status:    "Online",
 	}
-	globalState.UpdateService(s)
+	globalState.UpdateService(s.Name, s)
 
 	// Start Reading Input From User
 	go ReadTexts(wsconn, s.Name)

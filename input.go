@@ -14,7 +14,7 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 	channel, _ := conn.SubscribeToTexts()
 	buffer := bytes.NewBuffer([]byte{})
 	for s := range channel {
-		globalState.UpdateTime(name)
+		globalState.UpdateTime(name, name)
 		buffer.WriteString(s) // we've received new input
 		commandDecoder := json.NewDecoder(buffer)
 		for {
@@ -31,7 +31,7 @@ func ReadTexts(conn *wsconn.WSConn, name string) {
 			} else if err != nil {
 				defaultLogger.Debug("Command error, copying buffer")
 				defaultLogger.Error(err.Error())
-				io.Copy(buffer, commandDecoder.Buffered()) // TODO: okay to ignore error here?
+				io.Copy(buffer, commandDecoder.Buffered()) // TODO: okay to ignore error here?. Better with io.multireader.
 				break
 			}
 		}
@@ -46,11 +46,14 @@ func processCommand(command map[string]json.RawMessage, name string) {
 	}*/
 	for k, v := range command {
 		defaultLogger.Debug(k)
+		if k == "clearget" { // Hacky, time to refactor
+			globalState.ClearClient(name)
+		}
 		if k == "get" {
 			service := new(Service)
 			err := json.Unmarshal(v, service)
 			if err == nil {
-				globalState.UpdateService(*service)
+				globalState.UpdateService(name, *service)
 			} else {
 				defaultLogger.Error(err.Error())
 			}
