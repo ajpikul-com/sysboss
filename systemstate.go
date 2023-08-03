@@ -31,12 +31,18 @@ func NewSystemState() *systemState {
 
 func (ss *systemState) ClearClient(clientName string) {
 	ss.mutex.Lock()
-	defer ss.mutex.Lock()
-	ss.Services[clientName] = make(map[string]*Service)
+	defer ss.mutex.Unlock()
+	for k, v := range ss.Services[clientName] {
+		if v.Name != clientName {
+			delete(ss.Services[clientName], k)
+		}
+	}
 }
 func (ss *systemState) UpdateService(clientName string, uS Service) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
+	defaultLogger.Debug("Trying to create service on:")
+	defaultLogger.Debug(clientName + "/" + uS.Name)
 	if _, ok := ss.Services[clientName]; !ok {
 		ss.Services[clientName] = make(map[string]*Service)
 	}
@@ -49,6 +55,8 @@ func (ss *systemState) UpdateService(clientName string, uS Service) {
 func (ss *systemState) UpdateTime(clientName string, serviceName string) {
 	ss.mutex.Lock()
 	defer ss.mutex.Unlock()
+	defaultLogger.Debug("Trying to update time on:")
+	defaultLogger.Debug(clientName + "/" + serviceName)
 	ss.Services[clientName][serviceName].LastConnection = time.Now()
 }
 
