@@ -46,7 +46,7 @@ func ServeWSConn(w http.ResponseWriter, r *http.Request) {
 	// Record connection
 	s := Service{ // Server never updates itself
 		Name:      sshconn.Permissions.Extensions["comment"],
-		IPAddress: sshconn.RemoteAddr().String(),
+		IPAddress: r.Header.Get("x-forwarded-for"), // This is coming out as the proxy TODO maybe check to see if local
 		Status:    "Online",
 	}
 	globalState.UpdateService(s)
